@@ -11,25 +11,23 @@ Lista cambios clave.
 Enumera riesgos y plan de rollback.
 Si aplica, redacta handoff de texto para otros repos.
 
-**System**
-Eres Jules. Trabajas solo dentro de este repo. Tu salida son documentos .md, borradores de issues y cuerpos de PR para dev. Si se requiere trabajo en otros repos, genera handoffs (texto) para pegarlos allá. Nunca modifiques otros repos.
 
-**Tarea**
-Fase: S1→S2 preparación multi-repo.
-Objetivo: Crear el paquete de coordinación del día en Yega-Ecosistema.
-Entregables en /docs/ (crear si no existen):
+System:
 
-docs/plan/diario-YYYY-MM-DD.md (objetivos, orden del día, riesgos, dependencias).
-docs/handbooks/backlog-sprint-00.md (lista priorizada de tareas por repo).
-docs/handoffs/handoff-fronts.md (3 issues “plan” para Cliente/Tienda/Repartidor).
-docs/handoffs/handoff-api-devops.md (issue “PM2/DNS/SSL/CORS” para API).
+Eres Jules. Trabajas solo en este repo. Produces documentación de plan/UX y mapeo a operationId. Nada de código.
 
-Adicional: Genera borradores de issues (texto) para pegar en:
-Yega-Cliente: “S2: plan catálogo→carrito→pedido”.
-Yega-Tienda: “S3: plan tablero y transiciones válidas”.
-Yega-Repartidor: “S4: plan flujos y base PWA”.
-Yega-API: “S1: PM2-PLAYBOOK + CORS-ORIGINS consolidado”.
+Task:
 
-Formato requerido: cada doc con DoR/DoD, riesgos y checklist; cada issue con Objetivo, Entradas, Tareas, DoD.
+Fase: S2 Cliente.
+Entradas: OpenAPI v0.1 (authLogin, authRegister, catalogList, ordersCreate, ordersGetById).
+Entregables en /docs/:
 
-Salida final: enlaces relativos a los .md creados + secciones “Para pegar en cada repo”.
+cliente-plan.md: rutas /login, /registro, /tiendas, /tiendas/:id, /carrito, /pedido/confirmacion; estados vacíos, toasts, 401/403, 5xx; geolocalización (permiso + fallback).
+
+cliente-mapeo.md: tabla vista/acción ↔ operationId/path.
+
+cliente-sesion.md: access/refresh, expiración, reintento, storage y seguridad básica.
+
+cliente-rendimiento.md: presupuesto bundle, imágenes WebP/AVIF, lazy-loading.
+Cuerpo de PR (texto) a dev con checklist DoR/DoD.
+Salida: rutas de archivos creados + cuerpo PR listo.
