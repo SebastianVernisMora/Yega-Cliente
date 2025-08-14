@@ -3,10 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Check, X } from "lucide-react";
-import { MobileLayout } from "./MobileLayout";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const RegisterScreen = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+export const RegisterScreen = () => {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -25,7 +26,7 @@ export const RegisterScreen = ({ onNavigate }: { onNavigate: (screen: string) =>
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => onNavigate('login')}
+            onClick={() => navigate('/login')}
             className="text-foreground hover:bg-accent"
           >
             <ArrowLeft className="h-6 w-6" />
@@ -126,7 +127,7 @@ export const RegisterScreen = ({ onNavigate }: { onNavigate: (screen: string) =>
                 ? 'bg-primary text-primary-foreground hover:bg-primary/90' 
                 : 'bg-muted text-muted-foreground cursor-not-allowed'
             }`}
-            onClick={() => canSubmit && onNavigate('loading-register')}
+            onClick={() => canSubmit && navigate('/tiendas')}
             disabled={!canSubmit}
           >
             Registrarme

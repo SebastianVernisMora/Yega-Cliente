@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
-import { MobileLayout } from "./MobileLayout";
+import { useNavigate } from "react-router-dom";
 
-export const ConfirmationScreen = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+export const ConfirmationScreen = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center min-h-full p-6 bg-gradient-hero">
         {/* Success Icon */}
@@ -47,7 +49,7 @@ export const ConfirmationScreen = ({ onNavigate }: { onNavigate: (screen: string
         <div className="w-full space-y-4">
           <Button 
             className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 shadow-button transition-smooth"
-            onClick={() => onNavigate('tracking')}
+            onClick={() => navigate('/seguimiento/YG-2024-001')}
           >
             Rastrear mi pedido
           </Button>
@@ -55,7 +57,7 @@ export const ConfirmationScreen = ({ onNavigate }: { onNavigate: (screen: string
           <Button 
             variant="outline"
             className="w-full h-12 border-border text-foreground hover:bg-accent"
-            onClick={() => onNavigate('dashboard')}
+            onClick={() => navigate('/tiendas')}
           >
             Volver al inicio
           </Button>

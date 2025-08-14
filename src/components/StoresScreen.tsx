@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Search, Star, MapPin, Clock } from "lucide-react";
-import { Logo } from "@/components/ui/logo";
-import { MobileLayout } from "./MobileLayout";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const DashboardScreen = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+export const StoresScreen = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const categories = [
     { icon: "🍔", name: "Restaurantes", color: "bg-gradient-to-br from-slate-200 to-slate-300", count: "120+ lugares" },
@@ -133,7 +133,7 @@ export const DashboardScreen = ({ onNavigate }: { onNavigate: (screen: string) =
               <Card 
                 key={store.id} 
                 className="bg-gradient-card border-border p-5 hover:shadow-floating hover:scale-[1.02] transition-bounce cursor-pointer rounded-2xl shadow-card"
-                onClick={() => onNavigate('store')}
+                onClick={() => navigate(`/tiendas/${store.id}`)}
               >
                 <div className="flex space-x-5">
                   <div className="w-18 h-18 bg-gradient-to-br from-muted to-muted/50 rounded-2xl flex items-center justify-center shadow-subtle">

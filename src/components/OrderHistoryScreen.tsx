@@ -1,14 +1,11 @@
 import { ArrowLeft, MapPin, Clock, Star } from 'lucide-react';
-import { MobileLayout } from './MobileLayout';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { useNavigate } from 'react-router-dom';
 
-interface OrderHistoryScreenProps {
-  onNavigate: (screen: string) => void;
-}
-
-export const OrderHistoryScreen = ({ onNavigate }: OrderHistoryScreenProps) => {
+export const OrderHistoryScreen = () => {
+  const navigate = useNavigate();
   const orders = [
     {
       id: '#YEG001',
@@ -71,7 +68,7 @@ export const OrderHistoryScreen = ({ onNavigate }: OrderHistoryScreenProps) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => onNavigate('dashboard')}
+              onClick={() => navigate('/tiendas')}
               className="text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -139,7 +136,7 @@ export const OrderHistoryScreen = ({ onNavigate }: OrderHistoryScreenProps) => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => onNavigate('tracking')}
+                      onClick={() => navigate(`/seguimiento/${order.id.replace('#', '')}`)}
                     >
                       Rastrear
                     </Button>
@@ -159,7 +156,7 @@ export const OrderHistoryScreen = ({ onNavigate }: OrderHistoryScreenProps) => {
               </div>
               <h3 className="text-lg font-medium text-foreground mb-2">Sin pedidos aún</h3>
               <p className="text-muted-foreground mb-6">¡Haz tu primer pedido y aparecerá aquí!</p>
-              <Button onClick={() => onNavigate('dashboard')}>
+              <Button onClick={() => navigate('/tiendas')}>
                 Explorar tiendas
               </Button>
             </div>
