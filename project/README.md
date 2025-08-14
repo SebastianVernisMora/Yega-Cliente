@@ -1,58 +1,6 @@
-# Welcome to your Lovable project
+# Yega-Cliente
 
-## Project info
-
-**URL**: https://lovable.dev/projects/80b79af5-a1c8-40d6-9bc4-36f565e5a30d
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/80b79af5-a1c8-40d6-9bc4-36f565e5a30d) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
+Este proyecto está construido con:
 
 - Vite
 - TypeScript
@@ -60,14 +8,22 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## ¿Cómo puedo editar este código?
 
-Simply open [Lovable](https://lovable.dev/projects/80b79af5-a1c8-40d6-9bc4-36f565e5a30d) and click on Share -> Publish.
+El único requisito es tener Node.js y npm instalados - [instalar con nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-## Can I connect a custom domain to my Lovable project?
+Sigue estos pasos:
 
-Yes, you can!
+```sh
+# Paso 1: Clona el repositorio usando la URL de Git del proyecto.
+git clone <YOUR_GIT_URL>
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# Paso 2: Navega al directorio del proyecto.
+cd <YOUR_PROJECT_NAME>
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+# Paso 3: Instala las dependencias necesarias.
+npm i
+
+# Paso 4: Inicia el servidor de desarrollo con recarga automática y vista previa instantánea.
+npm run dev
+```
