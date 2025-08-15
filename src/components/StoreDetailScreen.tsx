@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Star, Plus } from "lucide-react";
-import { MobileLayout } from "./MobileLayout";
+import { useNavigate } from "react-router-dom";
 
-export const StoreDetailScreen = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+export const StoreDetailScreen = () => {
+  const navigate = useNavigate();
   const products = {
     tacos: [
       { id: 1, name: "Taco de Pastor", price: 18, description: "Con piña y cebolla" },
@@ -29,7 +30,7 @@ export const StoreDetailScreen = ({ onNavigate }: { onNavigate: (screen: string)
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => onNavigate('dashboard')}
+            onClick={() => navigate('/tiendas')}
             className="absolute top-4 left-4 z-10 text-foreground hover:bg-background/20"
           >
             <ArrowLeft className="h-6 w-6" />
@@ -76,7 +77,7 @@ export const StoreDetailScreen = ({ onNavigate }: { onNavigate: (screen: string)
                     <Button 
                       size="icon" 
                       className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                      onClick={() => onNavigate('cart')}
+                      onClick={() => navigate('/carrito')}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>
@@ -97,7 +98,7 @@ export const StoreDetailScreen = ({ onNavigate }: { onNavigate: (screen: string)
                     <Button 
                       size="icon" 
                       className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                      onClick={() => onNavigate('cart')}
+                      onClick={() => navigate('/carrito')}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>
@@ -118,7 +119,7 @@ export const StoreDetailScreen = ({ onNavigate }: { onNavigate: (screen: string)
                     <Button 
                       size="icon" 
                       className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                      onClick={() => onNavigate('cart')}
+                      onClick={() => navigate('/carrito')}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>

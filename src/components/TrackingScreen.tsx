@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
-import { MobileLayout } from './MobileLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, MapPin, Phone, MessageCircle, Clock, CheckCircle, Package, Truck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useNavigate, useParams } from 'react-router-dom';
 
-interface TrackingScreenProps {
-  onNavigate: (screen: string) => void;
-  orderId?: string;
-}
-
-export const TrackingScreen = ({ onNavigate, orderId = "YG-2024-001" }: TrackingScreenProps) => {
+export const TrackingScreen = () => {
+  const navigate = useNavigate();
+  const { id: orderId } = useParams();
   const [deliveryStep, setDeliveryStep] = useState(0);
   const [driverPosition, setDriverPosition] = useState({ x: 20, y: 80 });
   const [estimatedTime, setEstimatedTime] = useState(25);
@@ -61,7 +58,7 @@ export const TrackingScreen = ({ onNavigate, orderId = "YG-2024-001" }: Tracking
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => onNavigate('orders')}
+              onClick={() => navigate(-1)}
               className="text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -77,7 +74,7 @@ export const TrackingScreen = ({ onNavigate, orderId = "YG-2024-001" }: Tracking
           <Card className="bg-card border-border">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg text-foreground">Pedido {orderId}</CardTitle>
+                <CardTitle className="text-lg text-foreground">Pedido #{orderId}</CardTitle>
                 <span className="text-sm text-green-500 font-medium">
                   {deliveryStep >= 3 ? 'Entregado' : 'En camino'}
                 </span>
@@ -234,14 +231,14 @@ export const TrackingScreen = ({ onNavigate, orderId = "YG-2024-001" }: Tracking
             <Button 
               variant="outline" 
               className="w-full"
-              onClick={() => onNavigate('orders')}
+              onClick={() => navigate('/historial')}
             >
               Ver Historial de Pedidos
             </Button>
             <Button 
               variant="default"
               className="w-full"
-              onClick={() => onNavigate('dashboard')}
+              onClick={() => navigate('/tiendas')}
             >
               Volver al Inicio
             </Button>

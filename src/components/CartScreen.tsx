@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Plus, Minus } from "lucide-react";
-import { MobileLayout } from "./MobileLayout";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const CartScreen = ({ onNavigate }: { onNavigate: (screen: string) => void }) => {
+export const CartScreen = () => {
+  const navigate = useNavigate();
   const [tip, setTip] = useState(10);
   const [customTip, setCustomTip] = useState("");
   const [cartItems, setCartItems] = useState([
@@ -37,7 +38,7 @@ export const CartScreen = ({ onNavigate }: { onNavigate: (screen: string) => voi
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => onNavigate('store')}
+            onClick={() => navigate(-1)}
             className="text-foreground hover:bg-accent/50 rounded-xl transition-bounce"
           >
             <ArrowLeft className="h-6 w-6" />
@@ -146,7 +147,7 @@ export const CartScreen = ({ onNavigate }: { onNavigate: (screen: string) => voi
         <div className="p-6 bg-gradient-hero">
           <Button 
             className="w-full h-16 bg-gradient-button text-primary-foreground hover:shadow-floating hover:scale-[1.02] rounded-2xl font-semibold text-lg transition-bounce shadow-button"
-            onClick={() => onNavigate('loading-payment')}
+            onClick={() => navigate('/pedido/confirmacion')}
             disabled={cartItems.length === 0}
           >
             Confirmar y pagar
