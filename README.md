@@ -27,3 +27,15 @@ npm i
 # Paso 4: Inicia el servidor de desarrollo con recarga automática y vista previa instantánea.
 npm run dev
 ```
+
+## Automatización de Sprint 1
+
+- Tablero: Project v2 de usuario “Sprint 1 - Yega-Cliente”.
+- Issues del sprint: ver 
+  - 
+  - 
+- Flujo de estado automático: ver .
+
+Para listar Projects por CLI:
+
+
