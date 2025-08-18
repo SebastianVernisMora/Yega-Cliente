@@ -1,41 +1,57 @@
 # Yega-Cliente
 
-Este proyecto está construido con:
+**YEGA** es una aplicación móvil de delivery que permite a los usuarios solicitar productos de diferentes tiendas con entrega rápida. La aplicación simula una experiencia completa de compra desde el registro hasta la confirmación del pedido.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Este repositorio contiene el código fuente del front-end de la aplicación, construido con tecnologías modernas para ofrecer una experiencia de usuario fluida, personalizable y lista para demostraciones.
 
-## ¿Cómo puedo editar este código?
+## ✨ Características Principales
 
-El único requisito es tener Node.js y npm instalados - [instalar con nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Flujo de Autenticación Completo**: Registro con validación de contraseña y login seguro.
+- **Dashboard Interactivo**: Búsqueda de tiendas en tiempo real, categorías y promociones.
+- **Catálogo de Productos Detallado**: Cada tienda tiene su propio menú con productos, precios y descripciones.
+- **Carrito de Compras Funcional**: Modifica cantidades, elimina productos y ve el resumen del costo total (subtotal, envío y total).
+- **Simulación de Proceso de Pago**: Flujo completo desde el pago hasta la pantalla de confirmación del pedido.
+- **Historial de Pedidos**: Revisa pedidos anteriores, su estado y detalles.
+- **Perfil de Usuario**: Gestiona información personal, direcciones, métodos de pago y configuraciones de la app.
+- **Diseño Adaptable (Responsive)**: Optimizado para una experiencia móvil nativa.
+- **Tema Oscuro y Claro**: Soporte para ambos temas, con adaptación automática de componentes y logos.
 
-Sigue estos pasos:
+## 🛠️ Tecnologías Utilizadas
+
+- **Framework**: React + Vite
+- **Lenguaje**: TypeScript
+- **UI**: shadcn-ui
+- **Estilos**: Tailwind CSS
+- **Iconos**: Lucide React
+- **Gestión de Estado**: React Context y Hooks
+- **Formularios**: React Hook Form
+- **Navegación**: React Router
+
+## 🚀 Cómo ejecutar el proyecto
+
+El único requisito es tener Node.js y npm instalados. Se recomienda usar [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) para gestionar las versiones de Node.
+
+Sigue estos pasos para levantar el entorno de desarrollo:
 
 ```sh
-# Paso 1: Clona el repositorio usando la URL de Git del proyecto.
-git clone <YOUR_GIT_URL>
+# 1. Clona el repositorio
+git clone <URL_DEL_REPOSITORIO>
 
-# Paso 2: Navega al directorio del proyecto.
-cd <YOUR_PROJECT_NAME>
+# 2. Navega al directorio del proyecto
+cd Yega-Cliente
 
-# Paso 3: Instala las dependencias necesarias.
-npm i
+# 3. Instala las dependencias
+npm install
 
-# Paso 4: Inicia el servidor de desarrollo con recarga automática y vista previa instantánea.
+# 4. Inicia el servidor de desarrollo
 npm run dev
 ```
+El servidor se iniciará en `http://localhost:5173` con recarga automática.
 
-## Automatización de Sprint 1
+## 🤖 Automatización de Sprint 1
 
-- Tablero: Project v2 de usuario “Sprint 1 - Yega-Cliente”.
-- Issues del sprint: ver 
-  - 
-  - 
-- Flujo de estado automático: ver .
+Este proyecto utiliza automatizaciones para gestionar el flujo de trabajo del sprint a través de GitHub Actions y Projects.
 
-Para listar Projects por CLI:
-
-
+- **Tablero del Sprint**: Project v2 de usuario “Sprint 1 - Yega-Cliente”.
+- **Issues del Sprint**: Consulta el backlog completo en [`docs/ISSUES-Sprint-1.md`](./docs/ISSUES-Sprint-1.md).
+- **Flujo de Estado Automático**: El estado de los issues se actualiza automáticamente. Más detalles en [`docs/PROJECTS-AUTOMATION.md`](./docs/PROJECTS-AUTOMATION.md).
