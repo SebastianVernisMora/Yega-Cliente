@@ -1,35 +1,68 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Plus, Minus } from "lucide-react";
+import { ArrowLeft, Plus, Minus, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCartContext } from "@/context/CartContext";
+import { useToast } from "@/components/ui/use-toast";
 
 export const CartScreen = () => {
   const navigate = useNavigate();
-  const [tip, setTip] = useState(10);
+  const { cart, updateQuantity, removeFromCart, subtotal, shippingCost, total, clearCart } = useCartContext();
+  const { toast } = useToast();
+
+  const [tipPercentage, setTipPercentage] = useState(10);
   const [customTip, setCustomTip] = useState("");
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Taco de Pastor", price: 18, quantity: 2 },
-    { id: 2, name: "Taco de Carnitas", price: 20, quantity: 1 },
-    { id: 3, name: "Coca Cola 600ml", price: 25, quantity: 1 }
-  ]);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) return;
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
+  const tipAmount = customTip ? parseFloat(customTip) || 0 : (subtotal * tipPercentage / 100);
+  const finalTotal = total + tipAmount;
+
+  const handleCheckout = async () => {
+    setIsCheckingOut(true);
+    try {
+      // Simulación de llamada a la API
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast({
+        title: "¡Pedido realizado!",
+        description: "Tu pedido ha sido confirmado y está en camino.",
+      });
+      
+      clearCart();
+      navigate('/pedido/confirmacion');
+
+    } catch (error) {
+      toast({
+        title: "Error en el pedido",
+        description: "No se pudo procesar tu pedido. Inténtalo de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = 25;
-  const tipAmount = customTip ? parseFloat(customTip) || 0 : (subtotal * tip / 100);
-  const total = subtotal + shipping + tipAmount;
+  if (cart.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-full text-center p-6 bg-gradient-hero">
+        <div className="flex items-center p-6 pt-12 w-full">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-foreground hover:bg-accent/50 rounded-xl">
+            <ArrowLeft className="h-6 w-6" />
+          </Button>
+        </div>
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <ShoppingCart className="w-24 h-24 text-muted-foreground mb-6" />
+          <h1 className="text-3xl font-bold mb-2">Tu carrito está vacío</h1>
+          <p className="text-muted-foreground mb-8">Añade productos para verlos aquí.</p>
+          <Button onClick={() => navigate('/tiendas')} className="h-12 px-8 rounded-xl text-lg">
+            Ver tiendas
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-full bg-gradient-hero">
@@ -49,7 +82,7 @@ export const CartScreen = () => {
         <div className="flex-1 px-6 animate-fade-in-up">
           {/* Cart Items */}
           <div className="space-y-4 mb-8">
-            {cartItems.map((item) => (
+            {cart.map((item) => (
               <Card key={item.id} className="bg-gradient-card border-border p-5 shadow-card rounded-2xl hover:shadow-floating transition-smooth">
                 <div className="flex justify-between items-center">
                   <div className="flex-1">
@@ -61,13 +94,7 @@ export const CartScreen = () => {
                       variant="outline" 
                       size="icon" 
                       className="h-10 w-10 rounded-xl transition-bounce hover:scale-110"
-                      onClick={() => {
-                        if (item.quantity === 1) {
-                          removeItem(item.id);
-                        } else {
-                          updateQuantity(item.id, item.quantity - 1);
-                        }
-                      }}
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     >
                       <Minus className="h-4 w-4" />
                     </Button>
@@ -93,12 +120,12 @@ export const CartScreen = () => {
               {[10, 15, 20].map((percentage) => (
                 <Button
                   key={percentage}
-                  variant={tip === percentage ? "default" : "outline"}
+                  variant={tipPercentage === percentage ? "default" : "outline"}
                   className={`h-12 rounded-xl font-semibold transition-bounce ${
-                    tip === percentage ? 'shadow-button scale-105' : 'hover:scale-105'
+                    tipPercentage === percentage ? 'shadow-button scale-105' : 'hover:scale-105'
                   }`}
                   onClick={() => {
-                    setTip(percentage);
+                    setTipPercentage(percentage);
                     setCustomTip("");
                   }}
                 >
@@ -112,7 +139,7 @@ export const CartScreen = () => {
               value={customTip}
               onChange={(e) => {
                 setCustomTip(e.target.value);
-                setTip(0);
+                setTipPercentage(0);
               }}
               className="w-full h-12 px-4 bg-input border border-border rounded-xl text-foreground placeholder:text-muted-foreground transition-smooth focus:shadow-button focus:scale-[1.02]"
             />
@@ -124,11 +151,11 @@ export const CartScreen = () => {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="font-medium">Subtotal</span>
-                <span className="font-semibold">${subtotal}</span>
+                <span className="font-semibold">${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Envío</span>
-                <span className="font-semibold">${shipping}</span>
+                <span className="font-semibold">${shippingCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Propina</span>
@@ -137,7 +164,7 @@ export const CartScreen = () => {
               <Separator className="my-4" />
               <div className="flex justify-between font-bold text-xl">
                 <span>Total</span>
-                <span className="text-primary">${total.toFixed(2)}</span>
+                <span className="text-primary">${finalTotal.toFixed(2)}</span>
               </div>
             </div>
           </Card>
@@ -147,10 +174,10 @@ export const CartScreen = () => {
         <div className="p-6 bg-gradient-hero">
           <Button 
             className="w-full h-16 bg-gradient-button text-primary-foreground hover:shadow-floating hover:scale-[1.02] rounded-2xl font-semibold text-lg transition-bounce shadow-button"
-            onClick={() => navigate('/pedido/confirmacion')}
-            disabled={cartItems.length === 0}
+            onClick={handleCheckout}
+            disabled={cart.length === 0 || isCheckingOut}
           >
-            Confirmar y pagar
+            {isCheckingOut ? "Procesando..." : "Confirmar y pagar"}
           </Button>
         </div>
       </div>

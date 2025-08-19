@@ -3,13 +3,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/context/AuthContext";
 
 export const LoginScreen = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isLoading } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      await login({ email, password });
+      navigate('/tiendas');
+    } catch (error) {
+      // Optional: Show a toast or error message here
+      console.error("Login failed in component", error);
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center min-h-full p-6 bg-gradient-hero">
@@ -52,13 +62,10 @@ export const LoginScreen = () => {
 
         <Button
           className="w-full h-14 bg-gradient-button text-primary-foreground hover:shadow-floating hover:scale-[1.02] rounded-xl font-semibold text-lg transition-bounce shadow-button"
-          disabled={login.isPending}
-          onClick={async () => {
-            const res = await login.mutateAsync({ email, password });
-            if (res) navigate('/tiendas');
-          }}
+          disabled={isLoading}
+          onClick={handleLogin}
         >
-          {login.isPending ? 'Ingresando...' : 'Iniciar sesión'}
+          {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
         </Button>
 
         <div className="text-center space-y-4 pt-4">

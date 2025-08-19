@@ -5,9 +5,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 
 export const RegisterScreen = () => {
   const navigate = useNavigate();
+  const { register, isRegistering } = useAuthContext();
+  const { toast } = useToast();
+
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -18,7 +23,27 @@ export const RegisterScreen = () => {
   const hasUppercase = /[A-Z]/.test(password);
   const hasNumber = /\d/.test(password);
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const canSubmit = hasMinLength && hasUppercase && hasNumber && isValidEmail && firstName && lastName && termsAccepted;
+  const canSubmit = hasMinLength && hasUppercase && hasNumber && isValidEmail && firstName && lastName && termsAccepted && !isRegistering;
+
+  const handleRegister = async () => {
+    if (!canSubmit) return;
+
+    try {
+      await register({ email, password, firstName, lastName });
+      toast({
+        title: "¡Registro exitoso!",
+        description: "Ahora puedes iniciar sesión con tu cuenta.",
+      });
+      navigate('/login');
+    } catch (error) {
+      toast({
+        title: "Error en el registro",
+        description: "No se pudo completar el registro. Inténtalo de nuevo.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-full p-6 bg-gradient-hero">
         {/* Header */}
@@ -127,10 +152,10 @@ export const RegisterScreen = () => {
                 ? 'bg-primary text-primary-foreground hover:bg-primary/90' 
                 : 'bg-muted text-muted-foreground cursor-not-allowed'
             }`}
-            onClick={() => canSubmit && navigate('/tiendas')}
+            onClick={handleRegister}
             disabled={!canSubmit}
           >
-            Registrarme
+            {isRegistering ? 'Registrando...' : 'Registrarme'}
           </Button>
         </div>
       </div>
