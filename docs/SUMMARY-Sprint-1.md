@@ -48,7 +48,7 @@ Para simular un entorno real donde los datos provienen de un backend, se adoptó
 
 ## Conclusión
 
-El front-end de `Yega-Cliente` es ahora una aplicación funcional y reactiva, con un manejo de estado robusto y preparada para la futura integración con una API real. Todas las tareas del Sprint 1 han sido completadas satisfactoriamente, validado contra `docs/archivo/sprint-1/ISSUES-Sprint-1.md`. Las tareas completadas incluyen:
+El front-end de `Yega-Cliente` es ahora una aplicación funcional y reactiva, con un manejo de estado robusto y preparada para la futura integración con una API real. Todas las tareas del Sprint 1 han sido completadas satisfactoriamente, validado contra `docs/archivo/sprint-1/ISSUES.md`. Las tareas completadas incluyen:
 
 -   Implementación de Login (`LoginScreen`)
 -   Implementación de Registro (`RegisterScreen`)
