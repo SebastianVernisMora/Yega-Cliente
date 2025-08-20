@@ -1,12 +1,13 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '@/lib/api';
+import { useAuth, LoginCredentials, RegisterData } from '@/hooks/useAuth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
-  login: (data: any) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  login: (data: LoginCredentials) => Promise<any>;
+  register: (data: RegisterData) => Promise<any>;
   logout: () => void;
   isLoading: boolean;
   isRegistering: boolean;
@@ -15,49 +16,41 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+  const { login: loginMutation, isLoggingIn, register: registerMutation, isRegistering } = useAuth();
 
   const isAuthenticated = !!token;
 
-  const login = async (data: any) => {
-    setIsLoading(true);
+  useEffect(() => {
+    if (token) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, [token]);
+
+  const login = async (data: LoginCredentials) => {
     try {
-      // Simulación de llamada a la API
-      const response = await new Promise<{ data: { token: string } }>(resolve => {
-        setTimeout(() => {
-          resolve({ data: { token: 'fake-jwt-token' } });
-        }, 1000);
-      });
-      
-      const { token: newToken } = response.data;
-      setToken(newToken);
-      localStorage.setItem('token', newToken);
-      api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      const response = await loginMutation(data);
+      const newToken = response?.token; // Adjust based on actual API response
+      if (newToken) {
+        setToken(newToken);
+        localStorage.setItem('token', newToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      }
+      return response;
     } catch (error) {
-      console.error('Login failed', error);
+      console.error('Login failed in context', error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const register = async (data: any) => {
-    setIsRegistering(true);
+  const register = async (data: RegisterData) => {
     try {
-      // Simulación de llamada a la API
-      await new Promise<void>(resolve => {
-        setTimeout(() => {
-          console.log('User registered with:', data);
-          resolve();
-        }, 1500);
-      });
+      const response = await registerMutation(data);
+      // Handle post-registration logic, e.g., auto-login
+      return response;
     } catch (error) {
-      console.error('Registration failed', error);
+      console.error('Registration failed in context', error);
       throw error;
-    } finally {
-      setIsRegistering(false);
     }
   };
 
@@ -67,16 +60,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     delete api.defaults.headers.common['Authorization'];
   };
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-    }
-  }, []);
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, register, logout, isLoading, isRegistering }}>
+    <AuthContext.Provider value={{
+      isAuthenticated,
+      token,
+      login,
+      register,
+      logout,
+      isLoading: isLoggingIn,
+      isRegistering
+    }}>
       {children}
     </AuthContext.Provider>
   );

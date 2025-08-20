@@ -4,19 +4,23 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthContext } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export const LoginScreen = () => {
   const navigate = useNavigate();
   const { login, isLoading } = useAuthContext();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test@yega.com");
+  const [password, setPassword] = useState("password");
 
   const handleLogin = async () => {
     try {
       await login({ email, password });
+      toast.success("¡Bienvenido!", { description: "Serás redirigido a las tiendas." });
       navigate('/tiendas');
     } catch (error) {
-      // Optional: Show a toast or error message here
+      toast.error("Error de inicio de sesión", {
+        description: "Credenciales incorrectas. Por favor, intenta de nuevo."
+      });
       console.error("Login failed in component", error);
     }
   };
