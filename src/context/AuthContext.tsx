@@ -3,14 +3,19 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '@/lib/api';
 import { useAuth, LoginCredentials, RegisterData } from '@/hooks/useAuth';
 
+// La data que se espera de la respuesta de autenticación
+interface AuthResponse {
+  token: string;
+  // Se puede extender con datos del usuario si la API los devuelve
+  // user: { id: string; name: string; email: string; };
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   login: (data: LoginCredentials) => Promise<any>;
   register: (data: RegisterData) => Promise<any>;
   logout: () => void;
-  isLoading: boolean;
-  isRegistering: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

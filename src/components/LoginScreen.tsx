@@ -23,6 +23,7 @@ export const LoginScreen = () => {
       });
       console.error("Login failed in component", error);
     }
+    login({ email, password });
   };
 
   return (
@@ -66,10 +67,10 @@ export const LoginScreen = () => {
 
         <Button
           className="w-full h-14 bg-gradient-button text-primary-foreground hover:shadow-floating hover:scale-[1.02] rounded-xl font-semibold text-lg transition-bounce shadow-button"
-          disabled={isLoading}
+          disabled={isLoggingIn}
           onClick={handleLogin}
         >
-          {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
+          {isLoggingIn ? "Ingresando..." : "Iniciar sesión"}
         </Button>
 
         <div className="text-center space-y-4 pt-4">
