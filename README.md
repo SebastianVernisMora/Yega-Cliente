@@ -48,10 +48,19 @@ npm run dev
 ```
 El servidor se iniciará en `http://localhost:5173` con recarga automática.
 
-## 🤖 Automatización de Sprint 1
+## 🤖 Automatización de Sprint 2
 
-Este proyecto utiliza automatizaciones para gestionar el flujo de trabajo del sprint a través de GitHub Actions y Projects.
+Este proyecto utiliza automatizaciones para gestionar el flujo de trabajo del
+sprint a través de GitHub Actions y Projects.
+
+- **Tablero del Sprint**: Project v2 de usuario “Sprint 2 - Yega-Cliente”.
+- **Issues del Sprint**: Consulta el backlog completo en
+  [`docs/ISSUES-Sprint-2.md`](./docs/ISSUES-Sprint-2.md).
+- **Flujo de Estado Automático**: El estado de los issues se actualiza
+  automáticamente. Más detalles en
+  [`docs/PROJECTS-AUTOMATION-Sprint-2.md`](./docs/PROJECTS-AUTOMATION-Sprint-2.md).
 
 - **Tablero del Sprint**: Project v2 de usuario “Sprint 1 - Yega-Cliente”.
 - **Issues del Sprint**: Consulta el backlog completo en [`docs/archivo/sprint-1/ISSUES-Sprint-1.md`](./docs/archivo/sprint-1/ISSUES-Sprint-1.md).
 - **Flujo de Estado Automático**: El estado de los issues se actualiza automáticamente. Más detalles en [`docs/archivo/sprint-1/PROJECTS-AUTOMATION.md`](./docs/archivo/sprint-1/PROJECTS-AUTOMATION.md).
+
