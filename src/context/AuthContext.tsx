@@ -16,6 +16,8 @@ interface AuthContextType {
   login: (data: LoginCredentials) => Promise<any>;
   register: (data: RegisterData) => Promise<any>;
   logout: () => void;
+  isLoading: boolean;
+  isRegistering: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

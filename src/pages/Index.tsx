@@ -1,9 +1,14 @@
 import { Navigate } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Index = () => {
-  // TODO: Add logic to check for authentication
-  // If authenticated, redirect to "/tiendas"
-  // Otherwise, redirect to "/login"
+  const { isAuthenticated } = useAuthContext();
+  
+  // Redirect based on authentication status
+  if (isAuthenticated) {
+    return <Navigate to="/tiendas" replace />;
+  }
+  
   return <Navigate to="/login" replace />;
 };
 

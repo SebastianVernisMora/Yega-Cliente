@@ -5,11 +5,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/context/AuthContext";
 
 export const RegisterScreen = () => {
   const navigate = useNavigate();
-  const { register, isRegistering } = useAuth();
+  const { register, isLoading } = useAuthContext();
 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ export const RegisterScreen = () => {
   const hasUppercase = /[A-Z]/.test(password);
   const hasNumber = /\d/.test(password);
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const canSubmit = hasMinLength && hasUppercase && hasNumber && isValidEmail && firstName && lastName && termsAccepted && !isRegistering;
+  const canSubmit = hasMinLength && hasUppercase && hasNumber && isValidEmail && firstName && lastName && termsAccepted && !isLoading;
 
   const handleRegister = () => {
     if (!canSubmit) return;
@@ -142,9 +142,9 @@ export const RegisterScreen = () => {
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
             onClick={handleRegister}
-            disabled={!canSubmit || isRegistering}
+            disabled={!canSubmit || isLoading}
           >
-            {isRegistering ? "Registrando..." : "Registrarme"}
+            {isLoading ? "Registrando..." : "Registrarme"}
           </Button>
         </div>
       </div>
