@@ -1,27 +1,64 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Star, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ArrowLeft, Star, Plus, AlertCircle } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchStoreDetails } from "@/lib/mocks";
+import { useCartContext } from "@/context/CartContext";
 
 export const StoreDetailScreen = () => {
   const navigate = useNavigate();
-  const products = {
-    tacos: [
-      { id: 1, name: "Taco de Pastor", price: 18, description: "Con piña y cebolla" },
-      { id: 2, name: "Taco de Carnitas", price: 20, description: "Carne suave y jugosa" },
-      { id: 3, name: "Taco de Pollo", price: 16, description: "Pollo marinado con especias" }
-    ],
-    bebidas: [
-      { id: 4, name: "Coca Cola 600ml", price: 25, description: "Refresco frío" },
-      { id: 5, name: "Agua Natural", price: 15, description: "Botella 500ml" },
-      { id: 6, name: "Horchata", price: 30, description: "Bebida tradicional" }
-    ],
-    postres: [
-      { id: 7, name: "Flan Napolitano", price: 35, description: "Postre cremoso" },
-      { id: 8, name: "Churros", price: 40, description: "Con azúcar y canela" }
-    ]
-  };
+  const { id } = useParams();
+  const { addToCart } = useCartContext();
+
+  const { data: store, isLoading, isError } = useQuery({
+    queryKey: ["store", id],
+    queryFn: () => fetchStoreDetails(id),
+    enabled: !!id, // Solo ejecuta la query si el id existe
+  });
+
+  const productCategories = store?.products ? Object.keys(store.products) : [];
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col min-h-full pb-20 bg-gradient-hero">
+        <div className="relative h-48 bg-gradient-to-b from-muted to-background">
+          <Skeleton className="w-full h-full" />
+        </div>
+        <div className="p-6">
+          <Skeleton className="h-8 w-3/4 mb-2" />
+          <Skeleton className="h-5 w-1/2 mb-4" />
+          <div className="flex items-center justify-between mb-6">
+            <Skeleton className="h-6 w-1/4" />
+            <Skeleton className="h-6 w-1/4" />
+          </div>
+          <div className="grid w-full grid-cols-3 gap-2 bg-muted p-1 rounded-lg mb-6">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+          <div className="space-y-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-24 w-full rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !store) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-full text-red-500 bg-gradient-hero">
+        <AlertCircle className="w-16 h-16 mb-4" />
+        <h1 className="text-2xl font-bold">Error al cargar la tienda</h1>
+        <p>No pudimos encontrar los detalles. Inténtalo de nuevo.</p>
+        <Button onClick={() => navigate('/tiendas')} className="mt-6">Volver a tiendas</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-full pb-20 bg-gradient-hero">
@@ -36,97 +73,57 @@ export const StoreDetailScreen = () => {
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="text-center text-6xl mb-2">🌮</div>
+            <div className="text-center text-6xl mb-2">{store.image}</div>
           </div>
         </div>
 
         {/* Store Info */}
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-2">Tacos El Güero</h1>
-          <p className="text-muted-foreground mb-4">Comida Mexicana</p>
+          <h1 className="text-2xl font-bold mb-2">{store.name}</h1>
+          <p className="text-muted-foreground mb-4">{store.type}</p>
           
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-1">
               <Star className="h-5 w-5 text-yellow-500 fill-current" />
-              <span className="font-medium">4.8</span>
+              <span className="font-medium">{store.rating}</span>
               <span className="text-muted-foreground">(234 reseñas)</span>
             </div>
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Envío</p>
-              <p className="font-medium text-green-500">Gratis</p>
+              <p className="font-medium text-green-500">{store.delivery}</p>
             </div>
           </div>
 
           {/* Menu Tabs */}
-          <Tabs defaultValue="tacos" className="w-full">
+          <Tabs defaultValue={productCategories[0]} className="w-full">
             <TabsList className="grid w-full grid-cols-3 bg-muted">
-              <TabsTrigger value="tacos" className="data-[state=active]:bg-background">Tacos</TabsTrigger>
-              <TabsTrigger value="bebidas" className="data-[state=active]:bg-background">Bebidas</TabsTrigger>
-              <TabsTrigger value="postres" className="data-[state=active]:bg-background">Postres</TabsTrigger>
+              {productCategories.map(category => (
+                <TabsTrigger key={category} value={category} className="data-[state=active]:bg-background">{category}</TabsTrigger>
+              ))}
             </TabsList>
 
-            <TabsContent value="tacos" className="mt-6 space-y-4">
-              {products.tacos.map((product) => (
-                <Card key={product.id} className="bg-card border-border p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">{product.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">{product.description}</p>
-                      <p className="font-bold text-lg">${product.price}</p>
+            {productCategories.map(category => (
+              <TabsContent key={category} value={category} className="mt-6 space-y-4">
+                {store.products[category].map((product) => (
+                  <Card key={product.id} className="bg-card border-border p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-1">{product.name}</h3>
+                        <p className="text-sm text-muted-foreground mb-2">{product.description}</p>
+                        <p className="font-bold text-lg">${product.price}</p>
+                      </div>
+                      <Button 
+                        size="icon" 
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
+                        onClick={() => addToCart(product)}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <Button 
-                      size="icon" 
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                      onClick={() => navigate('/carrito')}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </TabsContent>
-
-            <TabsContent value="bebidas" className="mt-6 space-y-4">
-              {products.bebidas.map((product) => (
-                <Card key={product.id} className="bg-card border-border p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">{product.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">{product.description}</p>
-                      <p className="font-bold text-lg">${product.price}</p>
-                    </div>
-                    <Button 
-                      size="icon" 
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                      onClick={() => navigate('/carrito')}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </TabsContent>
-
-            <TabsContent value="postres" className="mt-6 space-y-4">
-              {products.postres.map((product) => (
-                <Card key={product.id} className="bg-card border-border p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">{product.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">{product.description}</p>
-                      <p className="font-bold text-lg">${product.price}</p>
-                    </div>
-                    <Button 
-                      size="icon" 
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                      onClick={() => navigate('/carrito')}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </TabsContent>
+                  </Card>
+                ))}
+              </TabsContent>
+            ))}
           </Tabs>
         </div>
       </div>
