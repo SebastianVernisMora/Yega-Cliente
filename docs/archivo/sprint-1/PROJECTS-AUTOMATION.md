@@ -22,7 +22,7 @@ Así, el workflow detecta el enlace y mueve el item en el Project.
 Todos los issues de este sprint usan la etiqueta: `sprint-1`.
 
 ## Tablero y backlog del sprint
-- Backlog: `docs/ISSUES-Sprint-1.md`
+- Backlog: `docs/archivo/sprint-1/ISSUES-Sprint-1.md`
 - Tablero (To Do / In Progress / Done): `docs/BOARD-Sprint-1.md`
 
 ## Dónde ver el Project
