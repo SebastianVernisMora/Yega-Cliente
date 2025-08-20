@@ -5,13 +5,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "@/context/AuthContext";
-import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export const RegisterScreen = () => {
   const navigate = useNavigate();
-  const { register, isRegistering } = useAuthContext();
-  const { toast } = useToast();
+  const { register, isRegistering } = useAuth();
 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -25,23 +23,14 @@ export const RegisterScreen = () => {
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const canSubmit = hasMinLength && hasUppercase && hasNumber && isValidEmail && firstName && lastName && termsAccepted && !isRegistering;
 
-  const handleRegister = async () => {
+  const handleRegister = () => {
     if (!canSubmit) return;
 
-    try {
-      await register({ email, password, firstName, lastName });
-      toast({
-        title: "¡Registro exitoso!",
-        description: "Ahora puedes iniciar sesión con tu cuenta.",
-      });
-      navigate('/login');
-    } catch (error) {
-      toast({
-        title: "Error en el registro",
-        description: "No se pudo completar el registro. Inténtalo de nuevo.",
-        variant: "destructive",
-      });
-    }
+    register({
+      name: `${firstName} ${lastName}`,
+      email,
+      password,
+    });
   };
 
   return (
@@ -146,16 +135,16 @@ export const RegisterScreen = () => {
             </label>
           </div>
 
-          <Button 
+          <Button
             className={`w-full h-12 shadow-button transition-smooth ${
-              canSubmit 
-                ? 'bg-primary text-primary-foreground hover:bg-primary/90' 
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
+              canSubmit
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
             onClick={handleRegister}
-            disabled={!canSubmit}
+            disabled={!canSubmit || isRegistering}
           >
-            {isRegistering ? 'Registrando...' : 'Registrarme'}
+            {isRegistering ? "Registrando..." : "Registrarme"}
           </Button>
         </div>
       </div>

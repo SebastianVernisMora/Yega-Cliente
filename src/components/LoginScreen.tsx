@@ -3,22 +3,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export const LoginScreen = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuthContext();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, isLoggingIn } = useAuth();
+  const [email, setEmail] = useState("test@yega.com");
+  const [password, setPassword] = useState("string");
 
-  const handleLogin = async () => {
-    try {
-      await login({ email, password });
-      navigate('/tiendas');
-    } catch (error) {
-      // Optional: Show a toast or error message here
-      console.error("Login failed in component", error);
+  const handleLogin = () => {
+    if (!email || !password) {
+      // Idealmente, se usaría un toast aquí.
+      console.error("Email and password are required");
+      return;
     }
+    login({ email, password });
   };
 
   return (
@@ -62,10 +61,10 @@ export const LoginScreen = () => {
 
         <Button
           className="w-full h-14 bg-gradient-button text-primary-foreground hover:shadow-floating hover:scale-[1.02] rounded-xl font-semibold text-lg transition-bounce shadow-button"
-          disabled={isLoading}
+          disabled={isLoggingIn}
           onClick={handleLogin}
         >
-          {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
+          {isLoggingIn ? "Ingresando..." : "Iniciar sesión"}
         </Button>
 
         <div className="text-center space-y-4 pt-4">
