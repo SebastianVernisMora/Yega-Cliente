@@ -1,6 +1,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '@/lib/api';
+import { useAuth, LoginCredentials, RegisterData } from '@/hooks/useAuth';
 
 // La data que se espera de la respuesta de autenticación
 interface AuthResponse {
@@ -12,7 +13,8 @@ interface AuthResponse {
 interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
-  setAuth: (data: AuthResponse) => void;
+  login: (data: LoginCredentials) => Promise<any>;
+  register: (data: RegisterData) => Promise<any>;
   logout: () => void;
 }
 
@@ -20,16 +22,41 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+  const { login: loginMutation, isLoggingIn, register: registerMutation, isRegistering } = useAuth();
 
   const isAuthenticated = !!token;
 
-  // Función para establecer el estado de autenticación
-  // Ya no es asíncrona ni maneja lógica de API
-  const setAuth = (data: AuthResponse) => {
-    const { token: newToken } = data;
-    setToken(newToken);
-    localStorage.setItem('token', newToken);
-    api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+  useEffect(() => {
+    if (token) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, [token]);
+
+  const login = async (data: LoginCredentials) => {
+    try {
+      const response = await loginMutation(data);
+      const newToken = response?.token; // Adjust based on actual API response
+      if (newToken) {
+        setToken(newToken);
+        localStorage.setItem('token', newToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      }
+      return response;
+    } catch (error) {
+      console.error('Login failed in context', error);
+      throw error;
+    }
+  };
+
+  const register = async (data: RegisterData) => {
+    try {
+      const response = await registerMutation(data);
+      // Handle post-registration logic, e.g., auto-login
+      return response;
+    } catch (error) {
+      console.error('Registration failed in context', error);
+      throw error;
+    }
   };
 
   const logout = () => {
@@ -38,17 +65,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     delete api.defaults.headers.common['Authorization'];
   };
 
-  // Efecto para inicializar el estado desde localStorage
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-    }
-  }, []);
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, setAuth, logout }}>
+    <AuthContext.Provider value={{
+      isAuthenticated,
+      token,
+      login,
+      register,
+      logout,
+      isLoading: isLoggingIn,
+      isRegistering
+    }}>
       {children}
     </AuthContext.Provider>
   );

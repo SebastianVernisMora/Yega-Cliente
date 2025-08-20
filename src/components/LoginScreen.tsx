@@ -3,19 +3,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export const LoginScreen = () => {
   const navigate = useNavigate();
-  const { login, isLoggingIn } = useAuth();
+  const { login, isLoading } = useAuthContext();
   const [email, setEmail] = useState("test@yega.com");
-  const [password, setPassword] = useState("string");
+  const [password, setPassword] = useState("password");
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      // Idealmente, se usaría un toast aquí.
-      console.error("Email and password are required");
-      return;
+  const handleLogin = async () => {
+    try {
+      await login({ email, password });
+      toast.success("¡Bienvenido!", { description: "Serás redirigido a las tiendas." });
+      navigate('/tiendas');
+    } catch (error) {
+      toast.error("Error de inicio de sesión", {
+        description: "Credenciales incorrectas. Por favor, intenta de nuevo."
+      });
+      console.error("Login failed in component", error);
     }
     login({ email, password });
   };

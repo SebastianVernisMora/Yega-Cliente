@@ -1,94 +1,53 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import api from "@/lib/api";
-import { useAuthContext } from "@/context/AuthContext";
-import { AxiosError } from "axios";
+import { api } from "@/lib/api";
+import { z } from "zod";
 
-// Tipos para las credenciales de login y datos de registro
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
+// Zod Schemas for validation
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
-interface RegisterData {
-  name: string;
-  email: string;
-  password?: string; // Hacer opcional si el backend lo maneja
-}
+const registerSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string(),
+});
 
-// Tipo esperado de la respuesta de la API de login
-interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
+// Types derived from schemas
+export type LoginCredentials = z.infer<typeof loginSchema>;
+export type RegisterData = z.infer<typeof registerSchema>;
 
-// --- Funciones de API ---
-
-const loginUser = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-  const { data } = await api.post<AuthResponse>("/auth/login", credentials);
+// API functions
+const login = async (credentials: LoginCredentials) => {
+  const { data } = await api.post("/auth/login", credentials);
   return data;
 };
 
-const registerUser = async (userData: RegisterData) => {
+const register = async (userData: RegisterData) => {
   const { data } = await api.post("/auth/register", userData);
   return data;
 };
 
-
-// --- Hook useAuth ---
-
+// The main hook
 export const useAuth = () => {
-  const navigate = useNavigate();
-  const { setAuth } = useAuthContext();
-
-  // Mutación para el login
-  const { mutate: login, isPending: isLoggingIn } = useMutation({
-    mutationFn: loginUser,
-    onSuccess: (data) => {
-      // Usar el contexto para actualizar el estado de autenticación global
-      setAuth(data);
-
-      toast.success("¡Bienvenido de vuelta!", {
-        description: "Has iniciado sesión correctamente.",
-      });
-      navigate("/tiendas");
-    },
-    onError: (error: AxiosError<{ message: string }>) => {
-      const errorMessage =
-        error.response?.data?.message || "Error al iniciar sesión";
-      toast.error("Error de autenticación", {
-        description: errorMessage,
-      });
-    },
+  const loginMutation = useMutation({
+    mutationFn: login,
   });
 
-  // Mutación para el registro
-  const { mutate: register, isPending: isRegistering } = useMutation({
-    mutationFn: registerUser,
-    onSuccess: () => {
-      toast.success("¡Registro exitoso!", {
-        description: "Ahora puedes iniciar sesión con tu nueva cuenta.",
-      });
-      navigate("/login");
-    },
-    onError: (error: AxiosError<{ message: string }>) => {
-      const errorMessage =
-        error.response?.data?.message || "Error en el registro";
-      toast.error("Error en el registro", {
-        description: errorMessage,
-      });
-    },
+  const registerMutation = useMutation({
+    mutationFn: register,
   });
 
   return {
-    login,
-    isLoggingIn,
-    register,
-    isRegistering,
+    // Login
+    login: loginMutation.mutateAsync,
+    isLoggingIn: loginMutation.isPending,
+    loginError: loginMutation.error,
+
+    // Register
+    register: registerMutation.mutateAsync,
+    isRegistering: registerMutation.isPending,
+    registerError: registerMutation.error,
   };
 };
