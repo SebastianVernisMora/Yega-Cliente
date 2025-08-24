@@ -31,7 +31,7 @@ export const CartScreen = () => {
       });
       
       clearCart();
-      navigate('/pedido/confirmacion');
+      navigate('/pedido/exito');
 
     } catch (error) {
       toast({
