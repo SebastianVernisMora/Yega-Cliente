@@ -68,21 +68,26 @@ export const StoreDetailScreen = () => {
             variant="ghost" 
             size="icon"
             onClick={() => navigate('/tiendas')}
-            className="absolute top-4 left-4 z-10 text-foreground hover:bg-background/20"
+            className="absolute top-4 left-4 z-10 text-white bg-black/20 hover:bg-black/50 rounded-full"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
+          <img
+            src={`https://placehold.co/600x400/EEE/31343C?text=${store.image}`}
+            alt={store.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="text-center text-6xl mb-2">{store.image}</div>
+            <h1 className="text-3xl font-bold text-white text-center">{store.name}</h1>
           </div>
         </div>
 
         {/* Store Info */}
-        <div className="p-6">
-          <h1 className="text-2xl font-bold mb-2">{store.name}</h1>
-          <p className="text-muted-foreground mb-4">{store.type}</p>
+        <div className="p-4 transform -translate-y-8 bg-gradient-hero rounded-t-2xl">
+          <p className="text-muted-foreground mb-4 text-center">{store.type}</p>
           
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-around mb-6 text-center">
             <div className="flex items-center space-x-1">
               <Star className="h-5 w-5 text-yellow-500 fill-current" />
               <span className="font-medium">{store.rating}</span>
