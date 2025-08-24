@@ -6,7 +6,7 @@ const Index = () => {
   
   // Redirect based on authentication status
   if (isAuthenticated) {
-    return <Navigate to="/tiendas" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
   
   return <Navigate to="/login" replace />;

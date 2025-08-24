@@ -13,6 +13,7 @@ import { CartScreen } from "./components/CartScreen";
 import { ConfirmationScreen } from "./components/ConfirmationScreen";
 import { TrackingScreen } from "./components/TrackingScreen";
 import { OrderHistoryScreen } from "./components/OrderHistoryScreen";
+import { DashboardScreen } from "./components/DashboardScreen";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
       <Routes>
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/registro" element={<RegisterScreen />} />
+        <Route path="/dashboard" element={<DashboardScreen />} />
         <Route path="/tiendas" element={<StoresScreen />} />
         <Route path="/tiendas/:id" element={<StoreDetailScreen />} />
         <Route path="/carrito" element={<CartScreen />} />
