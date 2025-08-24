@@ -1,4 +1,6 @@
 
+import { Order } from '@/types';
+
 export const categoriesMock = [
   { icon: "🍔", name: "Restaurantes", color: "bg-gradient-to-br from-slate-200 to-slate-300", count: "120+ lugares" },
   { icon: "🛒", name: "Super", color: "bg-gradient-to-br from-slate-100 to-slate-200", count: "45+ tiendas" },
@@ -103,5 +105,20 @@ export const fetchStoreDetails = (storeId) => {
         reject(new Error("Store not found"));
       }
     }, 800);
+  });
+};
+
+// Simulación de la función de checkout
+export const mockCheckout = (cart: any, total: number): Promise<Order> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const order: Order = {
+        id: `#YG-${new Date().getFullYear()}-${Math.floor(Math.random() * 1000)}`,
+        estimatedTime: "25-30 min",
+        total: total,
+        address: "Av. Principal #123"
+      };
+      resolve(order);
+    }, 1500);
   });
 };

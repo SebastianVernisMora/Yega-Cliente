@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartContext } from "@/context/CartContext";
 import { useToast } from "@/components/ui/use-toast";
+import { mockCheckout } from "@/lib/mocks";
+import { Order } from "@/types";
 
 export const CartScreen = () => {
   const navigate = useNavigate();
@@ -22,8 +24,7 @@ export const CartScreen = () => {
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     try {
-      // Simulación de llamada a la API
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const order: Order = await mockCheckout(cart, finalTotal);
       
       toast({
         title: "¡Pedido realizado!",
@@ -31,7 +32,7 @@ export const CartScreen = () => {
       });
       
       clearCart();
-      navigate('/pedido/confirmacion');
+      navigate('/pedido/confirmacion', { state: { order } });
 
     } catch (error) {
       toast({
