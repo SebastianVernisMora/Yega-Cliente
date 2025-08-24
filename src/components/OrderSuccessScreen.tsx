@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export const ConfirmationScreen = () => {
+export const OrderSuccessScreen = () => {
   const navigate = useNavigate();
 
   return (
